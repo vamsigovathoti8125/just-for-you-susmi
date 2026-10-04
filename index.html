@@ -764,14 +764,14 @@
         const defaultGift = {
             recipient: "Susmi",
             sender: "Someone who loves you",
-            welcome: "Thank you for being in my life. You mean more to me than I could ever put into words. I made this little place just for you, with all my heart.",
+            welcome: "Thank you for comming into my life. You mean more to me than I could ever put into words. I made this little place just for you, with all my heart.",
             opening: "Some feelings are too lovely for just one letter. Take your time, open each envelope, and know that every word is meant for you.",
             notes: [
                 { title: "Where our story began ♡", text: "Before I knew how much you would mean to me, there was just a simple hello and a little curiosity about you. I did not know then that one small beginning could become something I would hold so close to my heart. But looking back, I think my favourite story started right there—with you.", image: "./music/image1.jpeg" },
-                { title: "Then came your messages ✨", text: "Little by little, your messages became the part of my day I looked forward to most. Even a few words from you could make me smile at my phone like a fool. I started to notice how easily you could turn an ordinary moment into one I wanted to remember.", image: "./music/image2.jpeg" },
+                { title: "Then came your messages ✨", text: "Little by little, your messages became the part of my day I looked forward to most. Even a few words from you could make me smile at my phone like a fool. I started to notice how easily you could turn an ordinary moment into one I wanted to remember.", image: "./music/image22.jpeg" },
                 { title: "Closer with every conversation 🌷", text: "The more we talked, the more I wanted to know: what makes you laugh, what you dream about, and all the little things that make you you. Somewhere between those conversations, you stopped feeling like just someone I knew—and started feeling like someone my heart was choosing.", image: "./music/image3.jpeg" },
-                { title: "What I wish you could see 💌", text: "By then, I hoped you could feel how much you mattered to me. I wish I could let you see yourself through my eyes: so thoughtful, so lovely, and able to bring warmth into my day just by being there. I never want you to doubt how precious you are to me.", image: "./music/image4.jpeg" },
-                { title: "The feeling I kept close ❤️", text: "I wanted to tell you that my feelings were real—not only in the big moments, but in every small check-in, every laugh, and every time I wished our conversation could last a little longer. I hoped we would keep making memories that belonged just to us.", image: "./music/image1.jpeg" },
+                { title: "What I wish you could see 💌", text: "By then, I hoped you could feel how much you mattered to me. I wish I could let you see yourself through my eyes: so thoughtful, so lovely, and able to bring warmth into my day just by being there. I never want you to doubt how precious you are to me.", image: "./music/image33.jpeg" },
+                { title: "The feeling I kept close ❤️", text: "I wanted to tell you that my feelings were real—not only in the big moments, but in every small check-in, every laugh, and every time I wished our conversation could last a little longer. I hoped we would keep making memories that belonged just to us.", image: "./music/image55.jpeg" },
                 { title: "September 28, 10:46 pm 📞", text: "And then came the moment I will keep in my heart forever. On September 28, at 10:46 pm, you replied to me—and that little reply made me so happy. A few days later, we talked on a call. You could not believe we started at exactly 10:46 pm again. We talked for 3 hours, 7 minutes and 29 seconds. That call is one of the happiest moments of my life. After all those little conversations and feelings, that night felt like our own little world. I will always be grateful for it, and for you.", image: "./music/image2.jpeg" }
             ],
             finalMessage: "There is something I have been holding in for a while, something that comes straight from my heart. You mean too much to me to stay silent, so there is just one more thing I want to ask you...",
@@ -783,6 +783,11 @@
         };
 
         const emojis = ["♡", "✿", "∞", "☾", "✧", "♥"];
+        const defaultPhotoReplacements = new Map([
+            [1, { previous: "./music/image2.jpeg", current: "./music/image22.jpeg" }],
+            [3, { previous: "./music/image4.jpeg", current: "./music/image33.jpeg" }],
+            [4, { previous: "./music/image1.jpeg", current: "./music/image55.jpeg" }]
+        ]);
         const previousDefaultNotes = [
             { title: "Just you ♡", text: "Out of all the people in this world, my heart has always felt safest with you. There is something about you that brings a quiet peace into my life, like everything makes a little more sense when you are around.", image: "./music/image1.jpeg" },
             { title: "You matter ✨", text: "You may not realize how much light you bring into my world. Your presence, your voice, even the smallest things about you stay with me in ways I cannot explain.", image: "./music/image2.jpeg" },
@@ -829,11 +834,16 @@
             if (!normalized.recipient || !normalized.sender || value.notes.some(note => !note || typeof note.title !== "string" || typeof note.text !== "string" || typeof note.image !== "string")) {
                 throw new Error("Saved gift has an empty name or incomplete letter.");
             }
-            normalized.notes = value.notes.map((note, index) => ({
-                title: note.title.slice(0, 80),
-                text: note.text.slice(0, 1500),
-                image: note.image || defaultGift.notes[index].image
-            }));
+            normalized.notes = value.notes.map((note, index) => {
+                const replacement = defaultPhotoReplacements.get(index);
+                return {
+                    title: note.title.slice(0, 80),
+                    text: note.text.slice(0, 1500),
+                    image: note.image === replacement?.previous
+                        ? replacement.current
+                        : note.image || defaultGift.notes[index].image
+                };
+            });
             return normalized;
         }
 
