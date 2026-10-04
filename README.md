@@ -1,6 +1,6 @@
 # Just for you, Susmi
 
-A personalized, static love-letter experience with six envelopes, a video, background music, and a final proposal.
+A personalized, static letter experience with six envelopes, a video, background music, and a final proposal.
 
 ## Run locally
 
